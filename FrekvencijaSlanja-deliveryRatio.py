@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[65]:
+# In[11]:
 
 
 import pandas as pd
@@ -9,7 +9,7 @@ import numpy as np
 from operator import itemgetter
 import matplotlib.pyplot as plt
 get_ipython().magic(u'matplotlib inline')
-df = pd.read_csv('time-freq.csv', usecols = ["run","attrname", "name", "value", "type", "attrvalue"]) #, usecols = ["run","attrname" "name", "value", "type"])
+df = pd.read_csv('sim2_SF7.csv', usecols = ["run","attrname", "name", "value", "type", "attrvalue"]) #, usecols = ["run","attrname" "name", "value", "type"])
 
 sentPacketsDf = df[(df.name == 'sentPackets')]
 
@@ -124,22 +124,28 @@ for item in tmp:
         print("item is in array already")
         xAxis.append(item[0])
     brojCV = item[2]
-    if (brojCV == 10):
-        yAxis10cvorova.append(item[1]);
-    elif (brojCV == 30):
-        yAxis30cvorova.append(item[1]);
-    elif (brojCV == 50):
-        yAxis50cvorova.append(item[1]);
-    elif (brojCV == 70):
-        yAxis70cvorova.append(item[1]);
+    if (brojCV == 100):
+        yAxis100cvorova.append(item[1]);
+    elif (brojCV == 200):
+        yAxis200cvorova.append(item[1]);
+    elif (brojCV == 300):
+        yAxis300cvorova.append(item[1]);
+    elif (brojCV == 400):
+        yAxis400cvorova.append(item[1]);
+    elif (brojCV == 500):
+        yAxis500cvorova.append(item[1]);
+    elif (brojCV == 600):
+        yAxis600cvorova.append(item[1]);
+    elif (brojCV == 700):
+        yAxis700cvorova.append(item[1]);
     else:
         print("Delivery ratio se zeli spremiti u nepostojece polje!")
 
 print(xAxis)
-print(yAxis10cvorova)
-print(yAxis30cvorova)
-print(yAxis50cvorova)
-print(yAxis70cvorova)
+#print(yAxis10cvorova)
+#print(yAxis30cvorova)
+#print(yAxis50cvorova)
+#print(yAxis70cvorova)
 
 plt.plot(xAxis, yAxis100cvorova, label = '100')
 plt.plot(xAxis, yAxis200cvorova, label = '200')
@@ -157,7 +163,7 @@ plt.plot(xAxis, yAxis700cvorova, label = '700')
 plt.legend()
 plt.xlabel('frekvencija paketa')
 plt.ylabel('deliveryRatio')
-plt.ylim(ymax = 1, ymin = 0)
+plt.ylim(ymax = 0.35 , ymin = 0.25)
 plt.show()
     
 
