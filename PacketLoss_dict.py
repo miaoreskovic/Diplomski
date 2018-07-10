@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[1]:
+# In[7]:
 
 
 import pandas as pd
@@ -9,7 +9,7 @@ import numpy as np
 from operator import itemgetter
 import matplotlib.pyplot as plt
 get_ipython().magic(u'matplotlib inline')
-lora_testchart = pd.read_csv('sim1_BW125_CR45.csv', usecols = ["run","attrname", "name", "value", "type", "attrvalue"])
+lora_testchart = pd.read_csv('sim1_BW125_CR48.csv', usecols = ["run","attrname", "name", "value", "type", "attrvalue"])
 lora_testchart
 
 sentPacketsDf = lora_testchart[(lora_testchart.name == 'sentPackets')]
@@ -79,7 +79,7 @@ for index, row in dfSort.iterrows():
             sumDeliveryRatio = sumDeliveryRatio + 0
     else:
         if(sumDeliveryRatio != 0.0):
-            tmpList.append([curNumNodes, (sumDeliveryRatio/repetition), int(curSF)])
+            tmpList.append([curNumNodes, (sumDeliveryRatio/repetition)*100, int(curSF)])
         else:
             tmpList.append([curNumNodes, 0.0, int(curSF)])
         sumDeliveryRatio = 0
@@ -91,7 +91,7 @@ for index, row in dfSort.iterrows():
             repetition = repetition + 1
 
 if(sumDeliveryRatio != 0.0):
-    tmpList.append([curNumNodes, (sumDeliveryRatio/repetition), int(curSF)])
+    tmpList.append([curNumNodes, (sumDeliveryRatio/repetition)*100, int(curSF)])
 else:
     tmpList.append([curNumNodes, 0.0, int(curSF)])
 
@@ -144,9 +144,19 @@ plt.plot(xAxis, yAxisSF11, label = 'SF11')
 plt.plot(xAxis, yAxisSF12, label = 'SF12')
 
 plt.legend()
-plt.xlabel('number of nodes')
-plt.ylabel('deliveryRatio')
-plt.ylim(ymax = 1, ymin = 0)
+plt.xlabel(u"broj čvorova")
+plt.ylabel(u"uspješnost isporuke paketa (%)")
+plt.title(u"BW = 125 kHz, CR = 4/8, frekvencija slanja = 120 min")
+plt.ylim(ymax = 100, ymin = 0)
+plt.rcParams['axes.titlepad'] = 20 
+#plt.rcParams['figure.figsize'] = [10,15]
+#plt.subplots_adjust(left=0.125, bottom=5, right=0.9, top=6, wspace=0.2, hspace=5)
+plt.savefig('sim1_BW125_CR48-dpi100.svg', dpi = 100)
+plt.savefig('sim1_BW125_CR48-dpi100.png', dpi = 100)
+
+plt.savefig('sim1_BW125_CR48-dpi300.svg', dpi = 300)
+plt.savefig('sim1_BW125_CR48-dpi300.png', dpi = 300)
+
 plt.show()
-#plt.savefig('')
+#plt.savefig('4000m.pdf')
 

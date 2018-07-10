@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[11]:
+# In[19]:
 
 
 import pandas as pd
@@ -9,7 +9,7 @@ import numpy as np
 from operator import itemgetter
 import matplotlib.pyplot as plt
 get_ipython().magic(u'matplotlib inline')
-df = pd.read_csv('sim2_SF7.csv', usecols = ["run","attrname", "name", "value", "type", "attrvalue"]) #, usecols = ["run","attrname" "name", "value", "type"])
+df = pd.read_csv('sim2_SF10.csv', usecols = ["run","attrname", "name", "value", "type", "attrvalue"]) #, usecols = ["run","attrname" "name", "value", "type"])
 
 sentPacketsDf = df[(df.name == 'sentPackets')]
 
@@ -88,7 +88,7 @@ for index, row in dfSort.iterrows():
     
     else:
         if(sumDeliveryRatio != 0.0):
-            tmp.append([curFrekvSlanja, (sumDeliveryRatio/repetition), curBrojCvorova])
+            tmp.append([curFrekvSlanja, (sumDeliveryRatio/repetition)*100, curBrojCvorova])
         else:
             tmp.append([curFrekvSlanja, 0.0, curBrojCvorova])
         sumDeliveryRatio = 0
@@ -101,7 +101,7 @@ for index, row in dfSort.iterrows():
 
             
 if(sumDeliveryRatio != 0.0):
-    tmp.append([curFrekvSlanja, (sumDeliveryRatio/repetition), curBrojCvorova])
+    tmp.append([curFrekvSlanja, (sumDeliveryRatio/repetition)*100, curBrojCvorova])
 else:
     tmp.append([curFrekvSlanja, 0.0, curBrojCvorova])
     
@@ -161,9 +161,18 @@ plt.plot(xAxis, yAxis700cvorova, label = '700')
 #plt.plot(xAxis, yAxis70cvorova, label = '70')
 
 plt.legend()
-plt.xlabel('frekvencija paketa')
-plt.ylabel('deliveryRatio')
-plt.ylim(ymax = 0.35 , ymin = 0.25)
+plt.xlabel(u"frekvencija slanja paketa (min)")
+plt.ylabel(u"uspješnost isporuke paketa (%)")
+plt.title(u"BW = 125 kHz, CR = 4/5, SF = 10")
+plt.ylim(ymax = 100, ymin = 0)
+plt.rcParams['axes.titlepad'] = 20 
+plt.rcParams['figure.figsize'] = [15,20]
+
+plt.savefig('sim2_SF10-100dpi.svg', dpi = 100)
+plt.savefig('sim2_SF10-100dpi.png', dpi = 100)
+
+
+plt.savefig('sim2_SF10-300dpi.svg', dpi = 300)
+plt.savefig('sim2_SF10-300dpi.png', dpi = 300)
 plt.show()
-    
 

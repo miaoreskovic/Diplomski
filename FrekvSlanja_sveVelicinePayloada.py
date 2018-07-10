@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[22]:
+# In[40]:
 
 
 import pandas as pd
@@ -9,7 +9,7 @@ import numpy as np
 from operator import itemgetter
 import matplotlib.pyplot as plt
 get_ipython().magic(u'matplotlib inline')
-df = pd.read_csv('time-freq-payload.csv', usecols = ["run","attrname", "name", "value", "type", "attrvalue"]) #, usecols = ["run","attrname" "name", "value", "type"])
+df = pd.read_csv('sim5_SF12v2.csv', usecols = ["run","attrname", "name", "value", "type", "attrvalue"]) #, usecols = ["run","attrname" "name", "value", "type"])
 
 sentPacketsDf = df[(df.name == 'sentPackets')]
 
@@ -46,8 +46,8 @@ for index, row in payload.iterrows():
     run.append(row.run)
     payload_sendingFreq = row.attrvalue # varijable iteracije
     splitaneVarIteracije = payload_sendingFreq.split('=')
-    #print(load)
-    payloadPacket.append(int(splitaneVarIteracije[5]))
+    print(splitaneVarIteracije[7])
+    payloadPacket.append(int(splitaneVarIteracije[7]))
     frekvSlanjaTmp = splitaneVarIteracije[3].split(',')
     frekvSlanja.append(int(frekvSlanjaTmp[0].strip('(min')))
     #print(frekvSlanja)
@@ -58,7 +58,7 @@ print(frekvSlanja)
 df_payload = pd.DataFrame({'run': run, 'payload': payloadPacket})
 df_sendingFreq = pd.DataFrame({'run': run, 'frekvSlanja': frekvSlanja})
 #print("\n\n Sending freq\n")
-print(df_payload)
+#print(df_payload)
     
     
 df = pd.merge(sentPacketsByNodesTotal, repetition[['run','repetition']], on='run')
@@ -90,7 +90,7 @@ for index, row in dfSort.iterrows():
     
     else:
         if(sumDeliveryRatio != 0.0):
-            tmp.append([curFrekvSlanja, (sumDeliveryRatio/repetition), curPayload])
+            tmp.append([curFrekvSlanja, (sumDeliveryRatio/repetition)*100, curPayload])
         else:
             tmp.append([curFrekvSlanja, 0.0, curPayload])
         sumDeliveryRatio = 0
@@ -104,7 +104,7 @@ for index, row in dfSort.iterrows():
 
             
 if(sumDeliveryRatio != 0.0):
-    tmp.append([curFrekvSlanja, (sumDeliveryRatio/repetition), curPayload])
+    tmp.append([curFrekvSlanja, (sumDeliveryRatio/repetition)*100, curPayload])
 else:
     tmp.append([curFrekvSlanja, 0.0, curPayload])
     
@@ -124,23 +124,36 @@ for item in tmp:
     payload = item[2]
     #brojCV = item[2]
     if (payload == 5):
-        yAxisPayload5.append(item[1]);
+        yAxisPayload5.append((item[1]));
     elif (payload == 10):
-        yAxisPayload10.append(item[1]);
+        yAxisPayload10.append((item[1]));
     elif (payload == 20):
-        yAxisPayload20.append(item[1]);
+        yAxisPayload20.append((item[1]));
     else:
         print("Delivery ratio se zeli spremiti u nepostojece polje!")
+print(yAxisPayload5)
+print(yAxisPayload10)
+print(yAxisPayload20)
 
-
-plt.plot(xAxis, yAxisPayload5, label = 'payload = 5')
-plt.plot(xAxis, yAxisPayload10, label = 'payload = 10')
-plt.plot(xAxis, yAxisPayload20, label = 'payload = 20')
+plt.plot(xAxis, yAxisPayload5, label = 'teret = 5')
+plt.plot(xAxis, yAxisPayload10, label = 'teret = 10')
+plt.plot(xAxis, yAxisPayload20, label = 'teret = 20')
 
 plt.legend()
-plt.xlabel('frekvencija slanja paketa')
-plt.ylabel('deliveryRatio')
-plt.ylim(ymax = 1, ymin = 0)
+plt.xlabel(u"frekvencija slanja paketa (min)")
+plt.ylabel(u"uspješnost isporuke paketa (%)")
+plt.title(u"BW = 125 kHz, CR = 4/8, SF = 12, n = 300")
+plt.ylim(ymax = 100, ymin = 0)
+plt.rcParams['axes.titlepad'] = 20 
+plt.rcParams['figure.figsize'] = [15,20]
+
+plt.savefig('sim5_SF12v2-100dpi.svg', dpi = 100)
+plt.savefig('sim5_SF12v2-100dpi.png', dpi = 100)
+
+
+plt.savefig('sim5_SF12v2-300dpi.svg', dpi = 300)
+plt.savefig('sim5_SF12v2-300dpi.png', dpi = 300)
+
+
 plt.show()
-    
 
